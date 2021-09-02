@@ -21,7 +21,7 @@ class FirstPage extends StatelessWidget {
           body: Center(
             child: TextFormField(
               decoration: InputDecoration(
-                  labelText: 'Please, enter yout nickname. Don\'t use digits!'),
+                  labelText: 'Please, enter your nickname. Don\'t use digits!'),
               onFieldSubmitted: (name) =>
                   BlocProvider.of<NickHandlerBloc>(context)
                       .add(NickEnteredEvent(name)),
