@@ -11,3 +11,4 @@
     <br />1. Следование SRP - за обработку того или иного стейта ответственны отдельные классы, реализующие интерфейс [Handler](https://github.com/prihodulkin/Bloc-Provider-with-handlers/blob/main/lib/UI/handlers/handler.dart)
    <br /> 2. Строго определённое место, где расположены все обработчики, в противовес листенерам, которые могут быть раскиданы по дереву
    <br /> 3. Универсальность обработки стейтов, если он реализуют один интерфейс (см. [ErrorState](https://github.com/prihodulkin/Bloc-Provider-with-handlers/blob/main/lib/business_logic/models/error_state.dart), [NickHandlerErrorState](https://github.com/prihodulkin/Bloc-Provider-with-handlers/blob/main/lib/business_logic/bloc/nick_handler_bloc/nick_handler_state.dart))
+   <br /><br />[Пример внедрения зависимости](https://github.com/prihodulkin/Bloc-Provider-with-handlers/blob/main/lib/routes.dart) (мб место не лучшее)
