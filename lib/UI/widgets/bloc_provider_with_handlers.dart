@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_proj/UI/handlers/handler.dart';
 
+//служит для того, чтобы сразу "вешать" на блок обработчики
 class BlocProviderWithHandlers<BlocType extends BlocBase<StateType>, StateType>
     extends StatelessWidget {
   BlocProviderWithHandlers(
