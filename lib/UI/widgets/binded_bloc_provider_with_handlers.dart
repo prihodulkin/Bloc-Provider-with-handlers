@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_proj/UI/handlers/handler.dart';
+import 'package:test_proj/business_logic/bloc/binding_bloc/binding_bloc.dart';
 
-//служит для того, чтобы сразу "вешать" на блок обработчики
-class BlocProviderWithHandlers<BlocType extends BlocBase<StateType>, StateType>
-    extends StatelessWidget {
-  BlocProviderWithHandlers(
+//передаёт сведения об отправленном стейте в связующий блок
+class BindedBlocProviderWithHandlers<BlocType extends BlocBase<StateType>,
+    StateType> extends StatelessWidget {
+  BindedBlocProviderWithHandlers(
       {Key? key,
       required this.create,
       required this.handlers,
@@ -24,12 +25,13 @@ class BlocProviderWithHandlers<BlocType extends BlocBase<StateType>, StateType>
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     return BlocProvider<BlocType>(
       create: create,
       lazy: lazy,
       child: Builder(builder: (context) {
+        BlocProvider.of<BindingBloc>(context)
+            .add(BindingNewBlocEvent(BlocProvider.of<BlocType>(context)));
         return BlocListener<BlocType, StateType>(
           listener: handleState,
           child: child,
