@@ -7,4 +7,6 @@ abstract class DummyEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class DummyFake extends DummyEvent{}
+class DummyFakeEvent extends DummyEvent{}
+
+class DummyCallNickHandlerEvent extends DummyEvent{}

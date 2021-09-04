@@ -9,5 +9,8 @@ abstract class NickHandlerEvent extends Equatable {
 class NickEnteredEvent extends NickHandlerEvent {
   final String name;
   NickEnteredEvent(this.name);
-
 }
+
+class NickFakeEvent extends NickHandlerEvent {}
+
+class NickStateFromDummyEvent extends NickHandlerEvent{}

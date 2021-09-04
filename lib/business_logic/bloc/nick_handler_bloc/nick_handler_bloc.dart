@@ -25,6 +25,8 @@ class NickHandlerBloc extends Bloc<NickHandlerEvent, NickHandlerState> {
       } else {
         yield NickHandlerValidationSuccessState();
       }
+    } else if (event is NickStateFromDummyEvent) {
+      print("Event from Dummy BLoC was recieved!");
     }
   }
 }

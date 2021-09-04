@@ -13,8 +13,10 @@ class DummyBloc extends Bloc<DummyEvent, DummyState> {
   Stream<DummyState> mapEventToState(
     DummyEvent event,
   ) async* {
-    if (event is DummyFake) {
+    if (event is DummyFakeEvent) {
       print("DummyFake event was recieved!");
+    } else if (event is DummyCallNickHandlerEvent) {
+      yield DummyCallNickHandlerState();
     }
   }
 }
