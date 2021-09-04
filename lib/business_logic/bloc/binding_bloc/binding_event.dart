@@ -7,15 +7,8 @@ abstract class BindingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class BindingNewStateEvent<StateType>
-    extends BindingEvent {
-  final StateType state;
-  BindingNewStateEvent(this.state);
-  @override
-  List<Object> get props => [state!,];
-}
 
-class BindingNewBlocEvent<BlocType extends BlocBase<Object?>>
+class BindingNewBlocEvent<BlocType extends BlocBase<StateType>, StateType>
     extends BindingEvent {
   final BlocType bloc;
   BindingNewBlocEvent(this.bloc);

@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-abstract class StateToEventMapper<StateType, EventType> extends Equatable{
-  Type get getStateType => StateType;
-  Type get getEventType => EventType;
-  EventType map(StateType state);
+abstract class StateToEventMapper<StateType, OtherBlocType, OtherEventType>
+    extends Equatable {
+  Type get stateType => StateType;
+  Type get otherEventType => OtherEventType;
+  Type get otherBlocType => OtherBlocType;
+  OtherEventType map(StateType state);
 
   @override
-  List<Object?> get props => [getEventType,getStateType];
+  List<Object?> get props => [otherEventType, stateType, otherBlocType];
 }

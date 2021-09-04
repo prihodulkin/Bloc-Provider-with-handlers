@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_proj/business_logic/bloc/binding_bloc/binding_bloc.dart';
+import 'package:test_proj/business_logic/mappers/nick_validation_to_dummy_fake_mapper.dart';
 import 'package:test_proj/routes.dart';
 
 void main() {
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BindingBloc(),
+      create: (context) => BindingBloc([NickValidationToDummyFakeMapper()]),
       child: MaterialApp(
         onGenerateRoute: Routes.generateRoute,
         initialRoute: Routes.firstPage,

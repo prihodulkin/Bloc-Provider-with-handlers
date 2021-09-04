@@ -6,3 +6,5 @@ abstract class DummyEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class DummyFake extends DummyEvent{}

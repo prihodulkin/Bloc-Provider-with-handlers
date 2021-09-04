@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/single_child_widget.dart';
 import 'package:test_proj/UI/handlers/handler.dart';
 
 //служит для того, чтобы сразу "вешать" на блок обработчики
 class BlocProviderWithHandlers<BlocType extends BlocBase<StateType>, StateType>
-    extends StatelessWidget {
+    extends SingleChildStatelessWidget {
   BlocProviderWithHandlers(
       {Key? key,
       required this.create,
       required this.handlers,
       this.child,
       this.lazy})
-      : super(key: key);
+      : super(key: key,child: child);
 
   final BlocType Function(BuildContext context) create;
   final Widget? child;
@@ -22,10 +23,11 @@ class BlocProviderWithHandlers<BlocType extends BlocBase<StateType>, StateType>
     for (var handler in handlers) {
       handler.handle(state, context);
     }
+
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget buildWithChild(BuildContext context, Widget? child) {
     return BlocProvider<BlocType>(
       create: create,
       lazy: lazy,

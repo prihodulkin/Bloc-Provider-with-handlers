@@ -7,15 +7,12 @@ class SecondPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BindedBlocProvider<DummyBloc>(
-      create: (context) => DummyBloc(),
-      child: SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text('SecondPage'),
-            ),
-            body: Center(child: Text('Success!'))),
-      ),
+    return SafeArea(
+      child: Scaffold(
+          appBar: AppBar(
+            title: Text('SecondPage'),
+          ),
+          body: Center(child: Text('Success!'))),
     );
   }
 }

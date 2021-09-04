@@ -10,53 +10,43 @@ part 'binding_state.dart';
 class BindingBloc extends Bloc<BindingEvent, BindingState> {
   BindingBloc(List<StateToEventMapper> mappersList) : super(BindingInitial()) {
     for (var mapper in mappersList) {
-      if (!mappers.containsKey(mapper.getStateType)) {
-        mappers[mapper.getStateType] = Set<StateToEventMapper>()..add(mapper);
+      if (!_mappers.containsKey(mapper.stateType)) {
+        _mappers[mapper.stateType] = Set<StateToEventMapper>()..add(mapper);
       } else {
-        mappers[mapper.getStateType]!.add(mapper);
+        _mappers[mapper.stateType]!.add(mapper);
       }
     }
   }
 
-  final Map blocs = {};
-  final Map<Object, Set<StateToEventMapper>> mappers = {};
+  final Map<Type, Set<Bloc>?> _blocs = {};
+  final Map<Object, Set<StateToEventMapper>> _mappers = {};
 
-  ///удаляет мёртвые блоки
-  void _deleteClosedBlocs(BlocBase<Object?> bloc) {
-    var blocType = bloc.runtimeType;
-    if (!blocs.containsKey(blocType)) return;
-    var setOfBlocs = blocs[blocType] as Set;
-    setOfBlocs.removeWhere((element) => (element as Bloc).isClosed);
-    if (setOfBlocs.isEmpty) blocs.remove(blocType);
-  }
-
-  void handleNewBloc<BlocType extends BlocBase<Object?>>(BlocType bloc) {
-    _deleteClosedBlocs(bloc);
-    if (!blocs.containsKey(bloc.runtimeType)) {
-      blocs[bloc.runtimeType] = Set()..add(bloc);
+  void _handleNewBloc<BlocType extends Bloc>(BlocType bloc) {
+    if (!_blocs.containsKey(bloc.runtimeType)) {
+      _blocs[bloc.runtimeType] = Set()..add(bloc);
     } else {
       //можно добавлять разные блоки одного типа
-      var setOfBlocs = blocs[bloc.runtimeType] as Set;
+      var setOfBlocs = _blocs[bloc.runtimeType] as Set;
       setOfBlocs.add(bloc);
     }
+    _handleStates(bloc);
   }
 
-  bool _checkType<StateType>(BlocBase<Object?> bloc, StateType state) {
-    return bloc is BlocBase<StateType>;
-  }
-
-  void handleNewState<StateType>(StateType state) {
-    if (!(mappers[StateType] is Set<StateToEventMapper>)) return;
-    for (var key in blocs.keys) {
-      var bloc = key as BlocBase<Object?>;
-      if (_checkType(bloc, state)) {
-        for (var bloc in blocs[key]) {
-          for (var mapper in (mappers[StateType] as Set<StateToEventMapper>)) {
-            (bloc as Bloc).add(mapper.map(state));
+  Future<void> _handleStates(Bloc bloc) async {
+    await for (var state in bloc.stream) {
+      if (_mappers.containsKey(state.runtimeType)) {
+        for (var mapper
+            in _mappers[state.runtimeType] as Set<StateToEventMapper>) {
+          if (_blocs.containsKey(mapper.otherBlocType)) {
+            for (var otherBloc in _blocs[mapper.otherBlocType]!) {
+              otherBloc.add(mapper.map(state));
+            }
           }
         }
       }
     }
+    var setOfBlocs = _blocs[bloc.runtimeType] as Set;
+    setOfBlocs.remove(bloc);
   }
 
   @override
@@ -64,9 +54,8 @@ class BindingBloc extends Bloc<BindingEvent, BindingState> {
     BindingEvent event,
   ) async* {
     if (event is BindingNewBlocEvent) {
-      handleNewBloc(event.bloc);
-    } else if (event is BindingNewStateEvent) {
-      handleNewState(event.state);
+      final bloc = event.bloc;
+      if (bloc is Bloc) _handleNewBloc(bloc); //на случай попадания кубита
     }
   }
 }
